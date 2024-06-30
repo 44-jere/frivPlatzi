@@ -1,10 +1,12 @@
 const canvas = document.querySelector("#game")
 const game = canvas.getContext("2d")
 let canvasShape
+function getDimensions(){
+    if(window.innerHeight > window.innerWidth) return window.innerWidth * .8
+    else return window.innerHeight * .8
+}
 function setShape(){
-    
-    if(window.innerHeight > window.innerWidth) canvasShape = window.innerWidth * .8
-    else canvasShape = window.innerHeight * .8
+    canvasShape = getDimensions()
     canvas.setAttribute("width",canvasShape)
     canvas.setAttribute("height",canvasShape)
     return canvasShape
@@ -17,6 +19,7 @@ function startGame(){
     game.textAlign = ""
     let map = maps[0]
     map = map.trim().split("\n")
+    game.clearRect(0,0,canvasShape,canvasShape)
     map.forEach((line,row) => {
         line.trim().split("").forEach((caracter,column)=>{
             const emoji = emojis[caracter]
@@ -27,13 +30,13 @@ function startGame(){
                 posX,
                 posY
             )
-            if(caracter === "O"){
+            if(caracter === "O" && !playerPosition.y){
                 playerPosition.y = posY
                 playerPosition.x = posX
             }
         })
     });
-    game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
+    showPlayer()
 }
 window.addEventListener("load",startGame)
 // detectar movimientos del jugador
@@ -42,19 +45,34 @@ const playerPosition = {
     y:undefined
 }
 let BTNContainer = document.querySelector(".btns")
+function showPlayer(){
+    game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
+}
+function movePlayer(posision,direccion){   
+    let move = playerPosition[posision] +(direccion*canvasShape)
+    if(move<-1 || move > getDimensions()) return
+    playerPosition[posision] = move
+    showPlayer()
+}
 function ArrowUp(){
     console.log("has presionado el bonton up")
-    playerPosition.y -= canvasShape
-    console.log(playerPosition)
+    movePlayer("y",-1)
+    startGame()
 }
 function ArrowDown(){
     console.log("has presionado el bonton down")
+    movePlayer("y",1)
+    startGame()
 }
 function ArrowRight(){
     console.log("has presionado el bonton right")
+    movePlayer("x",1)
+    startGame()
 }
 function ArrowLeft(){
     console.log("has presionado el bonton left")
+    movePlayer("x",-1)
+    startGame()
 }
 const botonesMovimiento = {
     ArrowUp,
