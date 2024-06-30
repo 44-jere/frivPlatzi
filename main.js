@@ -1,7 +1,7 @@
 const canvas = document.querySelector("#game")
 const game = canvas.getContext("2d")
-function setShape(shape){
-    let canvasShape
+let canvasShape
+function setShape(){
     
     if(window.innerHeight > window.innerWidth) canvasShape = window.innerWidth * .8
     else canvasShape = window.innerHeight * .8
@@ -12,29 +12,40 @@ function setShape(shape){
 window.addEventListener("resize",startGame)
 function startGame(){  
     const elementSize = setShape() / 10
-
+    canvasShape = elementSize
     game.font = `${elementSize-20}px Verdana`
     game.textAlign = ""
     let map = maps[0]
     map = map.trim().split("\n")
     map.forEach((line,row) => {
-        console.log(line)
         line.trim().split("").forEach((caracter,column)=>{
-            console.log(caracter)
+            const emoji = emojis[caracter]
+            const posX = elementSize*(column)
+            const posY = elementSize*(row+.5)
             game.fillText(
-                emojis[caracter],
-                elementSize*(column),
-                elementSize*(row+.5)
+                emoji,
+                posX,
+                posY
             )
+            if(caracter === "O"){
+                playerPosition.y = posY
+                playerPosition.x = posX
+            }
         })
     });
+    game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
 }
 window.addEventListener("load",startGame)
 // detectar movimientos del jugador
-
+const playerPosition = {
+    x:undefined,
+    y:undefined
+}
 let BTNContainer = document.querySelector(".btns")
 function ArrowUp(){
     console.log("has presionado el bonton up")
+    playerPosition.y -= canvasShape
+    console.log(playerPosition)
 }
 function ArrowDown(){
     console.log("has presionado el bonton down")
@@ -45,7 +56,7 @@ function ArrowRight(){
 function ArrowLeft(){
     console.log("has presionado el bonton left")
 }
-let botonesMovimiento = {
+const botonesMovimiento = {
     ArrowUp,
     ArrowDown,
     ArrowRight,
