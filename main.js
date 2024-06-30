@@ -32,3 +32,31 @@ function startGame(){
 window.addEventListener("load",startGame)
 // detectar movimientos del jugador
 
+let BTNContainer = document.querySelector(".btns")
+function up(){
+    console.log("has presionado el bonton up")
+}
+function down(){
+    console.log("has presionado el bonton down")
+}
+function right(){
+    console.log("has presionado el bonton right")
+}
+function left(){
+    console.log("has presionado el bonton left")
+}
+let botonesMovimiento = {
+    up,
+    down,
+    right,
+    left
+}
+BTNContainer.addEventListener("click",e=>{
+    let targuet = e.target.id
+    console.log(botonesMovimiento)
+    
+})
+
+document.addEventListener("keydown",e=>{
+    console.log(e.key)
+})
