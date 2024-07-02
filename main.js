@@ -52,7 +52,6 @@ function startGame(){
                 caracter !== "-" &&
                 caracter !=="O"
             ){
-                console.log(caracter)
                 if(caracter === "I") nextLevel()
                 else console.log("1 vida menos por wey")
             }
@@ -77,22 +76,18 @@ function movePlayer(posision,direccion){
     showPlayer()
 }
 function ArrowUp(){
-    console.log("has presionado el bonton up")
     movePlayer("y",-1)
     startGame()
 }
 function ArrowDown(){
-    console.log("has presionado el bonton down")
     movePlayer("y",1)
     startGame()
 }
 function ArrowRight(){
-    console.log("has presionado el bonton right")
     movePlayer("x",1)
     startGame()
 }
 function ArrowLeft(){
-    console.log("has presionado el bonton left")
     movePlayer("x",-1)
     startGame()
 }
@@ -104,7 +99,7 @@ const botonesMovimiento = {
 }
 function presionarBTN(targuet){
     let funcion = botonesMovimiento[targuet]
-    if(!funcion) return console.log("esta funcion no existe")
+    if(!funcion) return
     funcion()
 }
 BTNContainer.addEventListener("click",e=>{
