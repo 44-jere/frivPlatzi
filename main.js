@@ -13,7 +13,6 @@ function setShape(){
     return canvasShape
 }
 function nextLevel(){
-    alert("siguiente nivel")
     if(maps.length-1 <= level){
         alert("no hay mas niveles")
         level = 0
@@ -21,6 +20,7 @@ function nextLevel(){
     playerPosition.x = undefined
     playerPosition.y = undefined
     startGame()
+    return true
 }
 window.addEventListener("resize",startGame)
 function startGame(){  
@@ -31,8 +31,8 @@ function startGame(){
     let map = maps[level]
     map = map.trim().split("\n")
     game.clearRect(0,0,canvasShape,canvasShape)
-    map.forEach((line,row) => {
-        line.trim().split("").forEach((caracter,column)=>{
+    map.find((line,row) => {
+        return line.trim().split("").find((caracter,column)=>{
             const emoji = emojis[caracter]
             const posX = elementSize*(column)
             const posY = elementSize*(row+.5)
@@ -52,7 +52,7 @@ function startGame(){
                 caracter !== "-" &&
                 caracter !=="O"
             ){
-                if(caracter === "I") nextLevel()
+                if(caracter === "I") return nextLevel()
                 else console.log("1 vida menos por wey")
             }
         })
