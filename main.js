@@ -34,6 +34,16 @@ function startGame(){
                 playerPosition.y = posY
                 playerPosition.x = posX
             }
+            
+            if(
+                parseInt(playerPosition.y) === parseInt(posY) &&
+                parseInt(playerPosition.x) === parseInt(posX) &&
+                caracter !== "-" &&
+                caracter !=="O"
+            ){
+                if(caracter === "I") alert("lo hiciste")
+                else alert("1 vida menos por wey")
+            }
         })
     });
     showPlayer()
