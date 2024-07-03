@@ -42,6 +42,17 @@ function nextLevel(){
     startGame()
     return true
 }
+function validarColisiones(posX,posY,caracter){
+    if(
+        parseInt(playerPosition.y) === parseInt(posY) &&
+        parseInt(playerPosition.x) === parseInt(posX) &&
+        caracter !== "-" &&
+        caracter !=="O"
+    ){
+        if(caracter === "I") return nextLevel()
+        else return bajarVida()
+    }
+}
 function startGame(){  
     const elementSize = setShape() / 10
     canvasShape = elementSize
@@ -66,16 +77,8 @@ function startGame(){
                 playerPosition.puertaX = posX
                 playerPosition.puertaY = posY
             }
-            if(playerPosition.x <= 0) playerPosition.x = 0
-            if(
-                parseInt(playerPosition.y) === parseInt(posY) &&
-                parseInt(playerPosition.x) === parseInt(posX) &&
-                caracter !== "-" &&
-                caracter !=="O"
-            ){
-                if(caracter === "I") return nextLevel()
-                else return bajarVida()
-            }
+            if(playerPosition.x <= 0) playerPosition.x = 0 // evita tener numeros negativos en el eje x
+            return validarColisiones(posX,posY,caracter)
         })
     });
     showPlayer()
