@@ -2,6 +2,7 @@ const canvas = document.querySelector("#game")
 const game = canvas.getContext("2d")
 let canvasShape
 let level = 0
+let vidas = 2
 function getDimensions(){
     if(window.innerHeight > window.innerWidth) return window.innerWidth * .8
     else return window.innerHeight * .8
@@ -19,6 +20,18 @@ function resetPlayerPosition(x = undefined,y = undefined){
 }
 function showPlayer(){
     game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
+}
+function bajarVida(){
+    if(vidas < 1 ){
+        level = 0
+        vidas = 3
+        resetPlayerPosition()
+        startGame()
+        return true
+    }
+    vidas--
+    resetPlayerPosition(playerPosition.puertaX,playerPosition.puertaY)
+    return false
 }
 function nextLevel(){
     if(maps.length-1 <= level){
@@ -61,7 +74,7 @@ function startGame(){
                 caracter !=="O"
             ){
                 if(caracter === "I") return nextLevel()
-                else return resetPlayerPosition(playerPosition.puertaX,playerPosition.puertaY)
+                else return bajarVida()
             }
         })
     });
