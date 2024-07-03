@@ -12,17 +12,23 @@ function setShape(){
     canvas.setAttribute("height",canvasShape)
     return canvasShape
 }
+function resetPlayerPosition(x = undefined,y = undefined){
+    playerPosition.x = x
+    playerPosition.y = y
+    return false
+}
+function showPlayer(){
+    game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
+}
 function nextLevel(){
     if(maps.length-1 <= level){
         alert("no hay mas niveles")
         level = 0
     }else level++
-    playerPosition.x = undefined
-    playerPosition.y = undefined
+    resetPlayerPosition()
     startGame()
     return true
 }
-window.addEventListener("resize",startGame)
 function startGame(){  
     const elementSize = setShape() / 10
     canvasShape = elementSize
@@ -53,22 +59,19 @@ function startGame(){
                 caracter !=="O"
             ){
                 if(caracter === "I") return nextLevel()
-                else console.log("1 vida menos por wey")
+                else return resetPlayerPosition()
             }
         })
     });
     showPlayer()
 }
-window.addEventListener("load",startGame)
+
 // detectar movimientos del jugador
 const playerPosition = {
     x:undefined,
     y:undefined
 }
 let BTNContainer = document.querySelector(".btns")
-function showPlayer(){
-    game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
-}
 function movePlayer(posision,direccion){   
     let move = playerPosition[posision] +(direccion*canvasShape)
     if(move<-1 || move >= getDimensions()) return 
@@ -111,3 +114,7 @@ document.addEventListener("keydown",e=>{
     let targuet = e.key
     presionarBTN(targuet)   
 })
+
+
+window.addEventListener("resize",startGame)
+window.addEventListener("load",startGame)
