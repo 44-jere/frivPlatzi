@@ -7,6 +7,13 @@ function getDimensions(){
     if(window.innerHeight > window.innerWidth) return window.innerWidth * .8
     else return window.innerHeight * .8
 }
+function actualizarVidas(){
+    let lives = vidas
+    if(lives >= 0 ) lives = lives +1
+    let spanVidas = document.getElementById("lives")
+    spanVidas.innerText = emojis["HEART"].repeat(lives)
+}
+actualizarVidas()
 function setShape(){
     canvasShape = getDimensions()
     canvas.setAttribute("width",canvasShape)
@@ -24,12 +31,14 @@ function showPlayer(){
 function bajarVida(){
     if(vidas < 1 ){
         level = 0
-        vidas = 3
+        vidas = 2
+        actualizarVidas()
         resetPlayerPosition()
         startGame()
         return true
     }
     vidas--
+    actualizarVidas()
     resetPlayerPosition(playerPosition.puertaX,playerPosition.puertaY)
     return false
 }
