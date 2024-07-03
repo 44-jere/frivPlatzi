@@ -48,8 +48,10 @@ function startGame(){
                 posY
             )
             if(caracter === "O" && !playerPosition.y){
-                playerPosition.y = posY
                 playerPosition.x = posX
+                playerPosition.y = posY
+                playerPosition.puertaX = posX
+                playerPosition.puertaY = posY
             }
             if(playerPosition.x <= 0) playerPosition.x = 0
             if(
@@ -59,7 +61,7 @@ function startGame(){
                 caracter !=="O"
             ){
                 if(caracter === "I") return nextLevel()
-                else return resetPlayerPosition()
+                else return resetPlayerPosition(playerPosition.puertaX,playerPosition.puertaY)
             }
         })
     });
@@ -69,7 +71,9 @@ function startGame(){
 // detectar movimientos del jugador
 const playerPosition = {
     x:undefined,
-    y:undefined
+    y:undefined,
+    puertaX:undefined,
+    puertaY:undefined
 }
 let BTNContainer = document.querySelector(".btns")
 function movePlayer(posision,direccion){   
