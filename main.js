@@ -3,6 +3,8 @@ const game = canvas.getContext("2d")
 let canvasShape
 let level = 0
 let vidas = 2
+let StartTime
+let tiempoTransCurrido
 function getDimensions(){
     if(window.innerHeight > window.innerWidth) return window.innerWidth * .8
     else return window.innerHeight * .8
@@ -14,6 +16,13 @@ function actualizarVidas(){
     spanVidas.innerText = emojis["HEART"].repeat(lives)
 }
 actualizarVidas()
+function actualizarRecord(){
+    const actualRecord = localStorage.getItem("record")
+    if(isNaN(actualRecord)) return
+    const recordSpan = document.getElementById("record")
+    recordSpan.innerText = formatearDiferenciaTiempo(parseInt(actualRecord))
+}
+actualizarRecord()
 function setShape(){
     canvasShape = getDimensions()
     canvas.setAttribute("width",canvasShape)
@@ -28,6 +37,23 @@ function resetPlayerPosition(x = undefined,y = undefined){
 function showPlayer(){
     game.fillText(emojis["PLAYER"],playerPosition.x,playerPosition.y)
 }
+function resetTime(){
+    clearInterval(tiempoTransCurrido)
+    StartTime = undefined
+    document.getElementById("time").innerText=""
+}
+function setRecord(){
+    let previousRecord = localStorage.getItem("record")
+    if(isNaN(previousRecord)){
+        localStorage.setItem("record",0)
+        return
+    }
+    let gameOverTime = new Date()
+    let actualRecord = gameOverTime-StartTime
+    if(previousRecord<=actualRecord) return false
+
+    localStorage.setItem("record",actualRecord)
+}
 function bajarVida(){
     if(vidas < 1 ){
         level = 0
@@ -35,6 +61,7 @@ function bajarVida(){
         actualizarVidas()
         resetPlayerPosition()
         startGame()
+        resetTime()
         return true
     }
     vidas--
@@ -42,10 +69,45 @@ function bajarVida(){
     resetPlayerPosition(playerPosition.puertaX,playerPosition.puertaY)
     return false
 }
+function formatearDiferenciaTiempo(diferenciaMilisegundos) {
+    // Crear una nueva fecha basada en la diferencia en milisegundos
+    let fecha = new Date(diferenciaMilisegundos);
+    
+    // Opciones de formateo para horas, minutos y segundos en formato de 24 horas
+    let opciones = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false, // Asegura que se use el formato de 24 horas
+        timeZone: 'UTC' // Asegura que el tiempo se formatee en UTC
+    };
+
+    // Formateador de fecha y hora
+    let formateador = new Intl.DateTimeFormat('default', opciones);
+
+    // Formatear la fecha
+    return formateador.format(fecha);
+}
+function contarTiempo(){
+    function setTime(tiempo){
+        let diferenciaTiempo = new Date() - StartTime
+        diferenciaTiempo = formatearDiferenciaTiempo(diferenciaTiempo)
+        tiempo.innerText = diferenciaTiempo
+    }
+    let tiempo = document.getElementById("time")
+    setTime(tiempo)
+    tiempoTransCurrido = setInterval(e=>{
+        setTime(tiempo)
+    },1000)
+}
 function nextLevel(){
+
     if(maps.length-1 <= level){
         alert("no hay mas niveles")
         level = 0
+        setRecord()
+        actualizarRecord()
+        resetTime()
     }else level++
     resetPlayerPosition()
     startGame()
@@ -62,7 +124,7 @@ function validarColisiones(posX,posY,caracter){
         else return bajarVida()
     }
 }
-function startGame(){  
+function startGame(){
     const elementSize = setShape() / 10
     canvasShape = elementSize
     game.font = `${elementSize-20}px Verdana`
@@ -132,6 +194,10 @@ const botonesMovimiento = {
 function presionarBTN(targuet){
     let funcion = botonesMovimiento[targuet]
     if(!funcion) return
+    if(!StartTime){
+        StartTime = new Date()
+        contarTiempo()
+    }
     funcion()
 }
 BTNContainer.addEventListener("click",e=>{
