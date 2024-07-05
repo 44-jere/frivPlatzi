@@ -125,7 +125,7 @@ function validarColisiones(posX,posY,caracter){
     }
 }
 function startGame(){
-    const elementSize = setShape() / 10
+    const elementSize = Math.floor(setShape() / 10)
     canvasShape = elementSize
     game.font = `${elementSize-20}px Verdana`
     game.textAlign = ""
@@ -210,6 +210,9 @@ document.addEventListener("keydown",e=>{
     presionarBTN(targuet)   
 })
 
-
-window.addEventListener("resize",startGame)
+function resize(){
+    resetPlayerPosition()
+    startGame()
+}
+window.addEventListener("resize",resize)
 window.addEventListener("load",startGame)
