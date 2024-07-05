@@ -70,8 +70,17 @@ function bajarVida(){
     return false
 }
 function formatearDiferenciaTiempo(diferenciaMilisegundos) {
+    // Verificar si el argumento es un número válido
+    if (isNaN(diferenciaMilisegundos) || typeof diferenciaMilisegundos !== 'number') {
+        throw new RangeError('Valor de tiempo inválido');
+    }
     // Crear una nueva fecha basada en la diferencia en milisegundos
     let fecha = new Date(diferenciaMilisegundos);
+
+    // Verificar si la fecha es válida
+    if (isNaN(fecha.getTime())) {
+        throw new RangeError('Valor de tiempo inválido');
+    }
     
     // Opciones de formateo para horas, minutos y segundos en formato de 24 horas
     let opciones = {
