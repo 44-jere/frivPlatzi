@@ -18,7 +18,7 @@ function actualizarVidas(){
 actualizarVidas()
 function actualizarRecord(){
     const actualRecord = localStorage.getItem("record")
-    if(isNaN(actualRecord)) return
+    if(isNaN(actualRecord) || actualRecord === null) return
     const recordSpan = document.getElementById("record")
     recordSpan.innerText = formatearDiferenciaTiempo(parseInt(actualRecord))
 }
