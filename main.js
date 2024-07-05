@@ -44,13 +44,13 @@ function resetTime(){
 }
 function setRecord(){
     let previousRecord = localStorage.getItem("record")
+    let gameOverTime = new Date()
+    let actualRecord = gameOverTime-StartTime
     if(isNaN(previousRecord) || previousRecord === null){
-        localStorage.setItem("record",0)
+        localStorage.setItem("record",actualRecord)
         return false
     }
     previousRecord = parseInt(previousRecord)
-    let gameOverTime = new Date()
-    let actualRecord = gameOverTime-StartTime
     if(isNaN(actualRecord)) return false
     if(previousRecord<=actualRecord) return false
     localStorage.setItem("record",actualRecord)
@@ -113,11 +113,11 @@ function contarTiempo(){
 function nextLevel(){
 
     if(maps.length-1 <= level){
-        alert("no hay mas niveles")
         level = 0
         setRecord()
         actualizarRecord()
         resetTime()
+        alert("no hay mas niveles")
     }else level++
     resetPlayerPosition()
     startGame()
