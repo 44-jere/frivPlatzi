@@ -44,14 +44,15 @@ function resetTime(){
 }
 function setRecord(){
     let previousRecord = localStorage.getItem("record")
-    if(isNaN(previousRecord)){
+    if(isNaN(previousRecord) || previousRecord === null){
         localStorage.setItem("record",0)
-        return
+        return false
     }
+    previousRecord = parseInt(previousRecord)
     let gameOverTime = new Date()
     let actualRecord = gameOverTime-StartTime
+    if(isNaN(actualRecord)) return false
     if(previousRecord<=actualRecord) return false
-
     localStorage.setItem("record",actualRecord)
 }
 function bajarVida(){
